@@ -1,4 +1,4 @@
-#import main
+
 import fileinput        # para usar input() en readder
 import syntacticMachine # para cambiar el estado de tokens_left y char_counter mediante stop() y next()
 #--------------------------------------
@@ -18,12 +18,17 @@ palabras_reservadas = {"True":0,
                      "write":9,
                      "var":10}
 RC_counter = 0 # contador de líneas para situar el error()
+#----------------------------------------------------------------------------
+# métodos
+#----------------------------------------------------------------------------
+def error(machine,linea,mensaje):
+    print("# ERROR (%s, linea: %d, %s)" %(machine,linea,mensaje))
 class LexicMachineClass:
     def init(self):
         print("##LEXIC MACHINE")
 
         #otra manera es averiguar el tamaño del fichero
-        codefilename = "codigo.txt"
+        codefilename = "codigo_1.txt"
         self.inputfile = open(codefilename, 'r')
         tokensfilename = "fichero_tokens.txt"
         self.outputfile = open(tokensfilename, 'a') #append
@@ -37,7 +42,7 @@ class LexicMachineClass:
 
         if c is '':
             self.genToken("EOF","")
-            syntacticMachine.stop()             #esto solo es para fin de fichero
+            syntacticMachine.stop_reading_file()#esto solo es para fin de fichero
 
         elif c is '\n':
             self.genToken("RC","")              #DELIMITADOR
@@ -95,8 +100,8 @@ class LexicMachineClass:
                     c = self.inputfile.read(1)
                     syntacticMachine.next()
                 self.genToken("COM", pal)
-            #else:
-            #    main.error(LEXIC,RC_counter,"Comentario mal construido")
+            else:
+                error("LEXIC",RC_counter,"Comentario mal construido")
         elif c.isdigit():
             d = 0
             while c.isdigit():
@@ -125,3 +130,4 @@ class LexicMachineClass:
         self.outputfile.write("<%s, %s>\n" %(code,value))
         self.outputfile.close()
         syntacticMachine.addToken()
+        syntacticMachine.stop_reading_token()

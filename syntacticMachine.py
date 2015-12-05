@@ -1,46 +1,43 @@
 import lexicMachine
 from lexicMachine import LexicMachineClass
-#--------------------------------------
+#----------------------------------------------------------------------------
 # variables globales
-#--------------------------------------
-unprocessed_tokens=1    #son los tokens del fichero codigo.txt
-                        #solo es 0==FALSE cuando encuentra el EOF
-tokens_left=0           #son los tokens procesados que se encuentran en tokens.txt
+#----------------------------------------------------------------------------
+EOF=0                   #solo es 0==FALSE cuando encuentra el EOF
+reading_token=0         #fichero_tokens.txt
                         #va a almacenar el número de tokens que va encontrando
 char_counter=0          #cuando termino de leer el codigo.txt y llamo a stop(), reinicio char_counter
-zona_declarativa=0
+tokens=0                #numero de tokens no tratados por el analizador sintáctico en fichero_tokens.txt
 
-#--------------------------------------
+#----------------------------------------------------------------------------
 # métodos
-#--------------------------------------
+#----------------------------------------------------------------------------
 def init():
-    global tokens_left, unprocessed_tokens
+    global EOF, reading_token
     print("##SYNTACTIC MACHINE")
-    #--------------------------------------
+# Solo se termina el análisis sintáctico si ya no quedan caracteres en fichero_codigo.txt
+    while EOF==0:
+    #----------------------------------------------------------------------------
     # 2) Si el analizador sintáctico no tiene tokens nuevos para leer,
     #    entonces pide al analizador léxico que se los proporcione y este lee el fichero entero
-    #--------------------------------------
+    #----------------------------------------------------------------------------
+        if tokens > 0:
+            print("## tokens_left: %d" %(tokens))
+            tratar_token()
+        else:
+            reading_token=1
+            while reading_token==1:     #la condición de parada es generar_token
+                                        #Es decir, va a leer el fichero completo
+                    print("## char_counter: {}" .format(char_counter))
+                    i = LexicMachineClass() #instancia de la clase
+                    i.init()
 
-    while unprocessed_tokens==1:    #la condición de parada es un token EOF
-                                    #Es decir, va a leer el fichero completo
-        print("## char_counter: {}" .format(char_counter))
-        i = LexicMachineClass() #instancia de la clase
-        i.init()
 
-    if tokens_left > 0:
-    #--------------------------------------
-    # 2.1) los tokens recogidos tiene que cumplir unas normas
-        # tal vez un while tokens_left > 0:
-        print("## tokens_left es %s" %(tokens_left))
-        readToken()
-        compruebaToken
-    else:
-        print("## tokens_left es 0")
-#--------------------------------------
+#----------------------------------------------------------------------------
 def compruebaToken():
     print("## compruebaToken()")
-def readToken():
-    global tokens_left
+def tratar_token():
+    global tokens
     print("## readToken()")
 #    tokensfilename = "fichero_tokens.txt"
 #    inputfile = open(tokensfilename, 'r')
@@ -61,16 +58,17 @@ def readToken():
     #     c=inputfile.read(1)
     #     if c=='>':
     #         token_abierto=1
-
-    tokens_left-=1
+    tokens-=1
 def next():
-    global char_counter,tokens_left
+    global char_counter
     char_counter+=1
 def addToken():
-    global tokens_left
-    tokens_left+=1
-def stop(): # método de parada del init, se activa con fin de fichero, no hay más que analizar
-    global unprocessed_tokens
-    print("##stopping syntactic ")
-    unprocessed_tokens=0
-    char_counter=0
+    global tokens
+    tokens+=1
+def stop_reading_token():
+    global reading_token
+    reading_token=0
+def stop_reading_file():
+    global EOF, reading_token
+    reading_token=0
+    EOF = 1

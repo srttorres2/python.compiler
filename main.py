@@ -30,5 +30,3 @@ syntacticMachine.init()
 #--------------------------------------
 # métodos
 #--------------------------------------
-def error(machine,linea,mensaje):
-    print("# ERROR %s, linea: %d, %s" %(machine,linea,mensaje) )
