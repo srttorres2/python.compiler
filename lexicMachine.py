@@ -22,7 +22,11 @@ RC_counter = 0 # contador de líneas para situar el error()
 # métodos
 #----------------------------------------------------------------------------
 def error(machine,linea,mensaje):
-    print("# ERROR (%s, linea: %d, %s)" %(machine,linea,mensaje))
+    print("# ERROR (%s, linea: %d, Token %s mal construido)" %(machine,linea,mensaje))
+    errors_filename = "fichero_errores.txt"
+    file_descriptor = open(errorsfilename, 'a')
+
+    file_descriptor.close()
 class LexicMachineClass:
     def init(self):
         print("##LEXIC MACHINE")
@@ -61,7 +65,7 @@ class LexicMachineClass:
             self.genToken("NEG","")             #OPERADOR NEGACIÓN
             syntacticMachine.next()
 
-        elif c is '+':
+        elif c is '+':                          #OPERADOR SUMA
             self.genToken("SUMA","")
             syntacticMachine.next()
 
@@ -69,28 +73,32 @@ class LexicMachineClass:
             syntacticMachine.next()
             c = self.inputfile.read(1)
             if c is '=':
-                self.genToken("COMP", "")
+                self.genToken("COMP", "")       #COMPARACION
                 syntacticMachine.next()
             else:
-                self.genToken("ASIG", "")
+                self.genToken("ASIG", "")       #ASIGNACION
         elif c is '-':
             syntacticMachine.next()
             c = self.inputfile.read(1)
             if c is '-':
-                self.genToken("PRE", "")
+                self.genToken("PRE", "")        #PREDECREMENTO
                 syntacticMachine.next()
-        elif c is '"':
+            else:
+                error("LEXIC",RC_counter,"predecremento")
+        elif c is '"':                          #STRING (O CADENA)
             pal = ''
             while True:
                 pal = pal + c
                 c = self.inputfile.read(1)
                 syntacticMachine.next()
+                if c is '\n':
+                    error("LEXIC",RC_counter,"cadena de String no cerrado con comillas,")
                 if c is '"':
                     break
             pal = pal + c
             self.genToken("STR", pal)
             syntacticMachine.next()
-        elif c is '/':
+        elif c is '/':                      #COMENTARIO
             syntacticMachine.next()
             c = self.inputfile.read(1)
             if c is '/':
@@ -101,13 +109,15 @@ class LexicMachineClass:
                     syntacticMachine.next()
                 self.genToken("COM", pal)
             else:
-                error("LEXIC",RC_counter,"Comentario mal construido")
-        elif c.isdigit():
+                error("LEXIC",RC_counter,"Comentario")
+        elif c.isdigit():                   #ENTERO
             d = 0
             while c.isdigit():
                 d  = d*10 + int(c)
                 c = self.inputfile.read(1)
                 syntacticMachine.next()
+                if c=="." or c==",":
+                    error("LEXIC",RC_counter,"Entero")
             self.genToken("INT", d)
 
         elif c.isalpha():
