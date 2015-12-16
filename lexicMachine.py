@@ -17,14 +17,14 @@ palabras_reservadas = {"True":0,
                      "promt":8,
                      "write":9,
                      "var":10}
-RC_counter = 0 # contador de líneas para situar el error()
+RC_counter = 1 # contador de líneas para situar el error()
 #----------------------------------------------------------------------------
 # métodos
 #----------------------------------------------------------------------------
 def error(machine,linea,mensaje):
     print("# ERROR (%s, linea: %d, Token %s mal construido)" %(machine,linea,mensaje))
     errors_filename = "fichero_errores.txt"
-    file_descriptor = open(errorsfilename, 'a')
+    file_descriptor = open(errors_filename, 'a')
 
     file_descriptor.close()
 class LexicMachineClass:

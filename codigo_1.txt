@@ -1,7 +1,9 @@
+var int this_is_cuenca = 0
 if this_is_sparta == this_is_cuenca 
 	var21="au au !"
 	kk=1
 	--kk
 /hola
+
 
 	
