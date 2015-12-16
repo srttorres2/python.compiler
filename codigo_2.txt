@@ -1,0 +1,8 @@
+var int this_is_cuenca = 0
+var int this_is_sparta = 0
+if this_is_sparta == this_is_cuenca {
+	var char kk=1	
+}
+this_is_cuenca = 1
+
+	

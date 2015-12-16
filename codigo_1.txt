@@ -4,6 +4,6 @@ if this_is_sparta == this_is_cuenca
 	kk=1
 	--kk
 /hola
-
+this_is_cuenca = 1.0
 
 	
