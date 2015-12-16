@@ -17,7 +17,7 @@ palabras_reservadas = {"True":0,
                      "promt":8,
                      "write":9,
                      "var":10}
-RC_counter = 1 # contador de líneas para situar el error()
+RC_counter = 0 # contador de líneas para situar el error()
 #----------------------------------------------------------------------------
 # métodos
 #----------------------------------------------------------------------------
